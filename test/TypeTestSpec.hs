@@ -17,9 +17,9 @@ shouldFailAssertion :: IO () -> IO ()
 shouldFailAssertion value = do
   result <- performTestCase value
   case result of
-    Just (True, _) -> return ()
-    Just (False, msg) -> expectationFailure $ "Raised an error " ++ msg
-    Nothing -> expectationFailure "Did not throw an assertion error"
+    TestCaseSuccess -> expectationFailure "Did not throw an assertion error"
+    TestCaseFailure _ -> return ()
+    TestCaseError msg -> expectationFailure $ "Raised an error " ++ msg
 
 shouldThrowException :: Exception e => e -> IO () -> IO ()
 shouldThrowException exception value = do
