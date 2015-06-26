@@ -33,7 +33,7 @@ shouldThrowException exception value = do
 
 main :: IO ()
 main = hspec $ do
-  describe "Type Test" $ do
+  describe "shouldNotCompile" $ do
     it "should not throw an assertion error when an expression is ill typed" $ do
       shouldNotCompile ("foo" :: Int)
 
