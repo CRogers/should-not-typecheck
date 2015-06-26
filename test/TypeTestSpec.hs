@@ -25,8 +25,8 @@ shouldThrowException :: Exception e => e -> IO () -> IO ()
 shouldThrowException exception value = do
   result <- performTestCase value
   case result of
-    TestCaseSuccess -> expectationFailure "Test case succeeded, did not throw exception"
-    TestCaseFailure msg -> expectationFailure "Test case failed, did not throw exception"
+    TestCaseSuccess -> expectationFailure "Did not throw exception: assertion succeeded"
+    TestCaseFailure msg -> expectationFailure "Did not throw exception: assertion failed"
     TestCaseError msg -> case msg == show exception of
       True -> return ()
       False -> expectationFailure "Incorrect exception propagated"
@@ -42,4 +42,8 @@ main = hspec $ do
 
     it "should throw an actual exception and not fail the assertion if the expression contains an non-HUnitFailure exception" $ do
       let exception = NoMethodError "lol"
+      shouldThrowException exception (shouldNotCompile (throw exception))
+
+    it "should propagate an actual exception and not fail the assertion if the expression contains a non-deferred ErrorCall exception" $ do
+      let exception = ErrorCall "yay"
       shouldThrowException exception (shouldNotCompile (throw exception))
