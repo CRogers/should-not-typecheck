@@ -3,8 +3,7 @@
 
 module TypeTest where
 
-import Control.Exception
-import Test.Hspec
+import Control.Exception (evaluate, try, ErrorCall)
 import Test.Hspec.Expectations (expectationFailure)
 
 shouldNotCompile :: forall a. a -> IO ()
@@ -13,9 +12,3 @@ shouldNotCompile a = do
   case result of
     Right _ -> expectationFailure "Expected expression to not compile but it did compile"
     Left _ -> return ()
-
-test :: IO ()
-test = hspec $ do
-  describe "lol" $ do
-    it "should not let me make a string an int" $ do
-      shouldNotCompile ("cat" :: String)
