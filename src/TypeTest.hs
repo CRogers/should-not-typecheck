@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module TypeTest where
+module TypeTest (shouldNotCompile) where
 
 import Control.Exception (evaluate, try, throw, ErrorCall(..))
 import Data.List (isSuffixOf)
