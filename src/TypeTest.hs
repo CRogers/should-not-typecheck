@@ -1,12 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# OPTIONS_GHC -fdefer-type-errors #-}
 
 module TypeTest where
 
 import Control.Exception (evaluate, try, ErrorCall)
-import Test.Hspec.Expectations (expectationFailure)
+import Test.Hspec.Expectations (Expectation, expectationFailure)
 
-shouldNotCompile :: forall a. a -> IO ()
+shouldNotCompile :: forall a. a -> Expectation
 shouldNotCompile a = do
   result <- try (evaluate a) :: IO (Either ErrorCall a)
   case result of
