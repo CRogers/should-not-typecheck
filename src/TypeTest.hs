@@ -1,19 +1,18 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -fdefer-type-errors #-}
 
 module TypeTest where
 
 import Control.Exception
 import Test.Hspec
+import Test.Hspec.Expectations (expectationFailure)
 
-thing :: Show a => a -> IO String
-thing a = do
-  result <- try (evaluate a)
-  return $ case result of
-    Right v -> "It succeeded with value " ++ show v
-    Left e -> "It failed:\n" ++ show (e :: SomeException)
-
-shouldNotCompile :: a -> IO ()
-shouldNotCompile a = (evaluate a) `shouldThrow` anyErrorCall
+shouldNotCompile :: forall a. a -> IO ()
+shouldNotCompile a = do
+  result <- try (evaluate a) :: IO (Either ErrorCall a)
+  case result of
+    Right _ -> expectationFailure "Expected expression to not compile but it did compile"
+    Left _ -> return ()
 
 test :: IO ()
 test = hspec $ do
