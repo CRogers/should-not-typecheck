@@ -9,25 +9,25 @@ import Test.Hspec.Expectations (expectationFailure)
 import Test.HUnit.Lang (performTestCase)
 import TypeTest
 
-pattern TestCaseSuccess = Nothing
-pattern TestCaseFailure msg = Just (True, msg)
-pattern TestCaseError msg = Just (False, msg)
+pattern TestSuccess = Nothing
+pattern TestFailure msg = Just (True, msg)
+pattern TestError msg = Just (False, msg)
 
 shouldFailAssertion :: IO () -> IO ()
 shouldFailAssertion value = do
   result <- performTestCase value
   case result of
-    TestCaseSuccess -> expectationFailure "Did not throw an assertion error"
-    TestCaseFailure _ -> return ()
-    TestCaseError msg -> expectationFailure $ "Raised an error " ++ msg
+    TestSuccess -> expectationFailure "Did not throw an assertion error"
+    TestFailure _ -> return ()
+    TestError msg -> expectationFailure $ "Raised an error " ++ msg
 
 shouldThrowException :: Exception e => e -> IO () -> IO ()
 shouldThrowException exception value = do
   result <- performTestCase value
   case result of
-    TestCaseSuccess -> expectationFailure "Did not throw exception: assertion succeeded"
-    TestCaseFailure msg -> expectationFailure "Did not throw exception: assertion failed"
-    TestCaseError msg -> case msg == show exception of
+    TestSuccess -> expectationFailure "Did not throw exception: assertion succeeded"
+    TestFailure msg -> expectationFailure "Did not throw exception: assertion failed"
+    TestError msg -> case msg == show exception of
       True -> return ()
       False -> expectationFailure "Incorrect exception propagated"
 
