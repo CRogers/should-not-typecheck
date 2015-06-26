@@ -12,8 +12,11 @@ thing a = do
     Right v -> "It succeeded with value " ++ show v
     Left e -> "It failed:\n" ++ show (e :: SomeException)
 
+shouldNotCompile :: a -> IO ()
+shouldNotCompile a = (evaluate a) `shouldThrow` anyErrorCall
+
 test :: IO ()
 test = hspec $ do
   describe "lol" $ do
     it "should not let me make a string an int" $ do
-      thing ("cat" :: Int) >>= (`shouldBe` "cat")
+      shouldNotCompile ("cat" :: String)
