@@ -22,3 +22,38 @@ main = hspec $ do
 ```
 
 It can be used similarly with HUnit.
+
+## Motivation
+
+Sometimes you want to test that it is impossible to type a particular expression.
+
+```haskell
+{-# LANGUAGE GADTs #-}
+data Expr t where
+  IntVal :: Int -> Expr Int
+  BoolVal :: Bool -> Expr Bool
+  Add :: Expr Int -> Expr Int -> Expr Int
+  -- ...
+```
+
+We might want to make sure that `Add (BoolVal True) (IntVal 4)` is not well typed. However, we can't even compile code like this in a unit test! Hence `should-not-typecheck`.
+
+## Limitations
+
+Unfortunately, we have to turn on deferred type errors for the entire test file rather than just specific expressions. This means that any type error will compile but fail at runtime. For example:
+
+```haskell
+{-# OPTIONS_GHC -fdefer-type-errors #-}
+
+-- ...
+
+main = hspec $ do
+  decsribe 4 $ do
+   -- ...
+```
+
+Will create a warning at compile time but not an error. All of the ill-typed expressions will also produce warnings and it will hard to quickly see which ones matter. The upside is that the test-suite will still fail if there are errors.
+
+### Workaround
+
+You can separate out the ill-typed expressions and test boilerplate into separate classes and only turn on deferred type errors the expressions. This means that type errors in test code will still be found at compile time. The downside is your tests may now be harder to read.
