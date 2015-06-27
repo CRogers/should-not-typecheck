@@ -2,6 +2,8 @@
 
 `should-not-typecheck` is a Haskell library which allows you to assert that an expression does not typecheck in your unit tests. It provides one function, `shouldNotTypecheck :: a -> Assertion`, which takes an expression and will fail the test if it typechecks. `shouldNotTypecheck` returns an HUnit `Assertion` (so it can be used with both `HUnit` and `hspec`).
 
+Avaliable on Hackage as [`should-not-typecheck`](https://hackage.haskell.org/package/should-not-typecheck)
+
 ## Example (hspec)
 
 The secret sauce is the [Deferred Type Errors GHC extension](https://downloads.haskell.org/~ghc/7.10.1/docs/html/users_guide/defer-type-errors.html). This allows you to write a non-typechecking expression which will throw an exception at run time (rather than erroring out at compile time). `shouldNotTypecheck` tries to catch that exception and fails the test if no deferred type error is caught.
