@@ -19,7 +19,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Test.ShouldNotTypecheck
-  build-depends:       base >= 4.7 && < 5
+  build-depends:       base >= 4.6 && < 5
                      , HUnit >= 1.2
   default-language:    Haskell2010
 

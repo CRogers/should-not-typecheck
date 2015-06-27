@@ -1,4 +1,3 @@
-{-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -fdefer-type-errors #-}
 
 module Main where
@@ -9,25 +8,21 @@ import Test.Hspec.Expectations (expectationFailure)
 import Test.HUnit.Lang (performTestCase)
 import Test.ShouldNotTypecheck
 
-pattern TestSuccess = Nothing
-pattern TestFailure msg = Just (True, msg)
-pattern TestError msg = Just (False, msg)
-
 shouldFailAssertion :: IO () -> IO ()
 shouldFailAssertion value = do
   result <- performTestCase value
   case result of
-    TestSuccess -> expectationFailure "Did not throw an assertion error"
-    TestFailure _ -> return ()
-    TestError msg -> expectationFailure $ "Raised an error " ++ msg
+    Nothing           -> expectationFailure "Did not throw an assertion error"
+    Just (True,  _)   -> return ()
+    Just (False, msg) -> expectationFailure $ "Raised an error " ++ msg
 
 shouldThrowException :: Exception e => e -> IO () -> IO ()
 shouldThrowException exception value = do
   result <- performTestCase value
   case result of
-    TestSuccess -> expectationFailure "Did not throw exception: assertion succeeded"
-    TestFailure msg -> expectationFailure "Did not throw exception: assertion failed"
-    TestError msg -> case msg == show exception of
+    Nothing           -> expectationFailure "Did not throw exception: assertion succeeded"
+    Just (True,  _)   -> expectationFailure "Did not throw exception: assertion failed"
+    Just (False, msg) -> case msg == show exception of
       True -> return ()
       False -> expectationFailure "Incorrect exception propagated"
 
