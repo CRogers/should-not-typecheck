@@ -7,7 +7,7 @@ import Control.Exception
 import Test.Hspec
 import Test.Hspec.Expectations (expectationFailure)
 import Test.HUnit.Lang (performTestCase)
-import TypeTest
+import Test.ShouldNotTypecheck
 
 pattern TestSuccess = Nothing
 pattern TestFailure msg = Just (True, msg)
@@ -35,15 +35,15 @@ main :: IO ()
 main = hspec $ do
   describe "shouldNotCompile" $ do
     it "should not throw an assertion error when an expression is ill typed" $ do
-      shouldNotCompile ("foo" :: Int)
+      shouldNotTypecheck ("foo" :: Int)
 
     it "should throw an assertion error when an expression is well typed" $ do
-      shouldFailAssertion (shouldNotCompile ("foo" :: String))
+      shouldFailAssertion (shouldNotTypecheck ("foo" :: String))
 
     it "should throw an actual exception and not fail the assertion if the expression contains an non-HUnitFailure exception" $ do
       let exception = NoMethodError "lol"
-      shouldThrowException exception (shouldNotCompile (throw exception))
+      shouldThrowException exception (shouldNotTypecheck (throw exception))
 
     it "should propagate an actual exception and not fail the assertion if the expression contains a non-deferred ErrorCall exception" $ do
       let exception = ErrorCall "yay"
-      shouldThrowException exception (shouldNotCompile (throw exception))
+      shouldThrowException exception (shouldNotTypecheck (throw exception))

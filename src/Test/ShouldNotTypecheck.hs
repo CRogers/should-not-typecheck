@@ -1,13 +1,13 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module TypeTest (shouldNotCompile) where
+module Test.ShouldNotTypecheck (shouldNotTypecheck) where
 
 import Control.Exception (evaluate, try, throw, ErrorCall(..))
 import Data.List (isSuffixOf)
 import Test.HUnit.Lang (Assertion, assertFailure)
 
-shouldNotCompile :: forall a. a -> Assertion
-shouldNotCompile a = do
+shouldNotTypecheck :: forall a. a -> Assertion
+shouldNotTypecheck a = do
   result <- try (evaluate a)
   case result of
     Right _ -> assertFailure "Expected expression to not compile but it did compile"
