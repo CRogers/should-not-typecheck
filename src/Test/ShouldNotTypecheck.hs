@@ -1,12 +1,10 @@
-{-# LANGUAGE ScopedTypeVariables #-}
-
 module Test.ShouldNotTypecheck (shouldNotTypecheck) where
 
 import Control.Exception (evaluate, try, throw, ErrorCall(..))
 import Data.List (isSuffixOf)
 import Test.HUnit.Lang (Assertion, assertFailure)
 
-shouldNotTypecheck :: forall a. a -> Assertion
+shouldNotTypecheck :: a -> Assertion
 shouldNotTypecheck a = do
   result <- try (evaluate a)
   case result of
