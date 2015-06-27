@@ -1,7 +1,8 @@
 name:                should-not-typecheck
 version:             0.1.0.0
-synopsis:            Initial project template from stack
-description:         Please see README.md
+synopsis:            A HUnit/hspec assertion to verify that an expression does not typecheck
+description:
+  For examples and an introduction to the library please take a look at the <https://github.com/CRogers/should-not-typecheck#should-not-typecheck- README> on github.
 homepage:            http://github.com/CRogers/should-not-typecheck
 license:             BSD3
 license-file:        LICENSE

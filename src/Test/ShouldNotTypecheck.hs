@@ -4,6 +4,13 @@ import Control.Exception (evaluate, try, throw, ErrorCall(..))
 import Data.List (isSuffixOf)
 import Test.HUnit.Lang (Assertion, assertFailure)
 
+{-|
+  Takes one argument, an expression that should not typecheck.
+  It will fail the test if the expression does typecheck.
+  Requires Deferred Type Errors to be enabled for the file it is called in.
+  See the <https://github.com/CRogers/should-not-typecheck#should-not-typecheck- README>
+  for examples and more infomation.
+-}
 shouldNotTypecheck :: a -> Assertion
 shouldNotTypecheck a = do
   result <- try (evaluate a)
