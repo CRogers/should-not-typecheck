@@ -25,10 +25,11 @@ It can be used similarly with HUnit.
 
 ## Motivation
 
-Sometimes you want to test that it is impossible to type a particular expression.
+Sometimes you want to ensure that it is impossible to type a particular expression. For example, imagine if we were making a typesafe Abstract Syntax Tree of mathematical expressions:
 
 ```haskell
 {-# LANGUAGE GADTs #-}
+
 data Expr t where
   IntVal :: Int -> Expr Int
   BoolVal :: Bool -> Expr Bool
@@ -36,24 +37,25 @@ data Expr t where
   -- ...
 ```
 
-We might want to make sure that `Add (BoolVal True) (IntVal 4)` is not well typed. However, we can't even compile code like this in a unit test! Hence `should-not-typecheck`.
+We might want to make sure that `Add (BoolVal True) (IntVal 4)` is not well typed. However, we can't even compile code like this to put in a unit test! This is where `should-not-typecheck` steps in.
 
 ## Limitations
 
-Unfortunately, we have to turn on deferred type errors for the entire test file rather than just specific expressions. This means that any type error will compile but fail at runtime. For example:
+Unfortunately, we can only turn on deferred type errors for the entire test file rather than just specific expressions. This means that any type error will compile but fail at runtime. For example:
 
 ```haskell
 {-# OPTIONS_GHC -fdefer-type-errors #-}
 
 -- ...
 
+main :: IO ()
 main = hspec $ do
-  decsribe 4 $ do
+  decsribe 4 $ do -- Oops!
    -- ...
 ```
 
-Will create a warning at compile time but not an error. All of the ill-typed expressions will also produce warnings and it will hard to quickly see which ones matter. The upside is that the test-suite will still fail if there are errors.
+Will create a warning at compile time but not an error. All of the ill-typed expressions we are testing will also produce warnings and it will hard to immediately see which ones matter. The upside is that the test-suite will still fail if there are errors.
 
 ### Workaround
 
-You can separate out the ill-typed expressions and test boilerplate into separate classes and only turn on deferred type errors the expressions. This means that type errors in test code will still be found at compile time. The downside is your tests may now be harder to read.
+You can separate out the ill-typed expressions we are testing and test boilerplate into separate files and only turn on deferred type errors for the expressions. This means that type errors in test code will still be found at compile time. The downside is your tests may now be harder to read.
