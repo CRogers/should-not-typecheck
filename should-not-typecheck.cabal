@@ -11,7 +11,9 @@ maintainer:          message.me.on@github.com
 -- copyright:
 category:            Testing
 build-type:          Simple
--- extra-source-files:
+extra-source-files:
+    README.md
+  , stack.yaml
 cabal-version:       >=1.10
 
 library
