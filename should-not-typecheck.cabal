@@ -17,7 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Test.ShouldNotTypecheck
   build-depends:       base >= 4.7 && < 5
-                     , HUnit
+                     , HUnit >= 1.2
   default-language:    Haskell2010
 
 test-suite tests
@@ -26,7 +26,7 @@ test-suite tests
   main-is:             ShouldNotTypecheckSpec.hs
   build-depends:       base
                      , should-not-typecheck
-                     , HUnit
-                     , hspec
-                     , hspec-expectations
+                     , HUnit >= 1.2
+                     , hspec >= 2.1
+                     , hspec-expectations >= 0.6 
   default-language:    Haskell2010
