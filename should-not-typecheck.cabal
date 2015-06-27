@@ -1,14 +1,14 @@
-name:                type-test
+name:                should-not-typecheck
 version:             0.1.0.0
 synopsis:            Initial project template from stack
 description:         Please see README.md
-homepage:            http://github.com/name/project
+homepage:            http://github.com/CRogers/should-not-compile
 license:             BSD3
 license-file:        LICENSE
-author:              Your name here
-maintainer:          your.address@example.com
+author:              Callum Rogers
+maintainer:          message.me.on@github.com
 -- copyright:
-category:            Web
+category:            Testing
 build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10
@@ -17,7 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     TypeTest
   build-depends:       base >= 4.7 && < 5
-                     , hspec-expectations
+                     , HUnit
   default-language:    Haskell2010
 
 test-suite tests
@@ -25,7 +25,7 @@ test-suite tests
   hs-source-dirs:      test
   main-is:             TypeTestSpec.hs
   build-depends:       base
-                     , type-test
+                     , should-not-typecheck
                      , HUnit
                      , hspec
                      , hspec-expectations
