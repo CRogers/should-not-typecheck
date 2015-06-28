@@ -1,6 +1,6 @@
 # should-not-typecheck [![Build Status](https://travis-ci.org/CRogers/should-not-typecheck.svg?branch=master)](https://travis-ci.org/CRogers/should-not-typecheck)
 
-`should-not-typecheck` is a Haskell library which allows you to assert that an expression does not typecheck in your unit tests. It provides one function, `shouldNotTypecheck :: a -> Assertion`, which takes an expression and will fail the test if it typechecks. `shouldNotTypecheck` returns an HUnit `Assertion` (so it can be used with both `HUnit` and `hspec`).
+`should-not-typecheck` is a Haskell library which allows you to assert that an expression does not typecheck in your unit tests. It provides one function, `shouldNotTypecheck`, which takes an expression and will fail the test if it typechecks. `shouldNotTypecheck` returns an HUnit `Assertion` (so it can be used with both `HUnit` and `hspec`).
 
 Avaliable on Hackage as [`should-not-typecheck`](https://hackage.haskell.org/package/should-not-typecheck).
 
@@ -24,6 +24,42 @@ main = hspec $ do
 ```
 
 It can be used similarly with HUnit.
+
+### `NFData a` constraint
+
+Haskell is a lazy language - the exceptions produced by deferred type errors will not get evaluated unless we explicitly and deeply force the value. `NFData` is a typeclass from the `deepseq` library which allows you to describe how to convert an expression to Normal Form, ie fully evaluate it. For vanilla Haskell types you only need to derive `Generic` and the `deepseq` class will handle it for you:
+
+```haskell
+{-# LANGUAGE DeriveGeneric #-}
+
+import GHC.Generics (Generic)
+
+data SomeType a = WithSome | DataConstructors a
+  deriving Generic
+```
+
+With `deepseq >= 1.4`, this `Generic` option is included with the library. With `deepseq <= 1.3` you'll have to use the `deepseq-generics` library as well.
+
+With more complex datatypes, like GADTs and those existentially quantified, `DeriveGeneric` does not work. You will need to provide an instance for `NFData` yourself, but not to worry as it follows a pattern:
+
+```haskell
+{-# LANGUAGE GADTs #-}
+
+import Control.DeepSeq (NFData)
+
+data Expr t where
+  IntVal :: Int -> Expr Int
+  BoolVal :: Bool -> Expr Bool
+  Add :: Expr Int -> Expr Int -> Expr Int
+
+instance NFData (Expr t) where
+  rnf expr = case expr of
+    IntVal i  -> rnf i -- call rnf on every subvalue
+    BoolVal b -> rnf b
+    Add l r   -> rnf l `seq` rnf r -- and `seq` multiple values together
+```
+
+If you forget to specify provide an `NFData` instance for a type `should-not-typecheck` should warn you.
 
 ## Motivation
 
