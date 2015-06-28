@@ -40,6 +40,8 @@ instance NFData (Expr t) where
     BoolVal b -> rnf b
     Add l r -> rnf l `seq` rnf r
 
+data NoNFDataInstance = NoNFDataInstance
+
 main :: IO ()
 main = hspec $ do
   describe "shouldNotCompile" $ do
@@ -59,3 +61,6 @@ main = hspec $ do
 
     it "should not throw an assertion when an expression with more than one level of constructors is ill typed" $ do
       shouldNotTypecheck (Add (BoolVal True) (IntVal 4))
+
+    it "should warn if an expression had a type error due to lack of NFData instance" $ do
+      shouldFailAssertion (shouldNotTypecheck NoNFDataInstance)
