@@ -1,5 +1,5 @@
 name:                should-not-typecheck
-version:             1.0
+version:             1.0.1
 synopsis:            A HUnit/hspec assertion library to verify that an expression does not typecheck
 description:
   For examples and an introduction to the library please take a look at the <https://github.com/CRogers/should-not-typecheck#should-not-typecheck- README> on github.
