@@ -26,6 +26,6 @@ shouldNotTypecheck a = do
     Right _ -> assertFailure "Expected expression to not compile but it did compile"
     Left (ErrorCall msg) -> case isSuffixOf "(deferred type error)" msg of
       True -> case isSubsequenceOf "No instance for" msg && isSubsequenceOf "NFData" msg of
-        True -> assertFailure $ "Make sure the expression has an NFData instance! See docs at <todo>. Full error:\n" ++ msg
+        True -> assertFailure $ "Make sure the expression has an NFData instance! See docs at https://github.com/CRogers/should-not-typecheck#nfdata-a-constraint. Full error:\n" ++ msg
         False -> return ()
       False -> throwIO (ErrorCall msg)
