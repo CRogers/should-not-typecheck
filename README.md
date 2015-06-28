@@ -25,7 +25,7 @@ It can be used similarly with HUnit.
 
 ### `NFData a` constraint
 
-Haskell is a lazy language - the exceptions produced by deferred type errors will not get evaluated unless we explicitly and deeply force the value. [`NFData`](https://hackage.haskell.org/package/deepseq-1.4.1.1/docs/Control-DeepSeq.html#t:NFData) is a typeclass from the [`deepseq`](https://hackage.haskell.org/package/deepseq) library which allows you to describe how to convert an expression to Normal Form, ie fully evaluate it. `should-not-typecheck` needs this typeclass to fully evaluate expressions passed to it. For vanilla Haskell types you only need to derive `Generic` and the `deepseq` class will handle it for you:
+Haskell is a lazy language - the exceptions produced by deferred type errors will not get evaluated unless we explicitly and deeply force the value. [`NFData`](https://hackage.haskell.org/package/deepseq-1.4.1.1/docs/Control-DeepSeq.html#t:NFData) is a typeclass from the [`deepseq`](https://hackage.haskell.org/package/deepseq) library which allows you to describe how to convert an expression to Normal Form, ie fully evaluate it. `shouldNotTypecheck` uses this typeclass to fully evaluate expressions passed to it. For vanilla Haskell types you only need to derive `Generic` and the `deepseq` class will handle it for you:
 
 ```haskell
 {-# LANGUAGE DeriveGeneric #-}
