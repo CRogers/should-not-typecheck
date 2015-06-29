@@ -96,7 +96,7 @@ Unfortunately, we can only turn on deferred type errors for the entire test file
 
 main :: IO ()
 main = hspec $ do
-  decsribe 4 $ do -- Oops!
+  describe 4 $ do -- Oops!
    -- ...
 ```
 
