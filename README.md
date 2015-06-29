@@ -1,4 +1,4 @@
-# should-not-typecheck [![Build Status](https://travis-ci.org/CRogers/should-not-typecheck.svg?branch=master)](https://travis-ci.org/CRogers/should-not-typecheck) [![Hackage](https://img.shields.io/hackage/v/should-not-typecheck.svg)](https://hackage.haskell.org/package/should-not-typecheck)
+B# should-not-typecheck [![Build Status](https://travis-ci.org/CRogers/should-not-typecheck.svg?branch=master)](https://travis-ci.org/CRogers/should-not-typecheck) [![Hackage](https://img.shields.io/hackage/v/should-not-typecheck.svg)](https://hackage.haskell.org/package/should-not-typecheck)
 
 `should-not-typecheck` is a Haskell library which allows you to assert that an expression does not typecheck in your tests. It provides one function, `shouldNotTypecheck`, which takes an expression and will fail the test if it typechecks. `shouldNotTypecheck` returns an HUnit `Assertion` (so it can be used with both `HUnit` and `hspec`).
 
@@ -96,7 +96,7 @@ Unfortunately, we can only turn on deferred type errors for the entire test file
 
 main :: IO ()
 main = hspec $ do
-  decsribe 4 $ do -- Oops!
+  describe 4 $ do -- Oops!
    -- ...
 ```
 
