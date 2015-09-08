@@ -1,5 +1,8 @@
 # `should-not-typecheck` changelog
 
+## 2.0.1
+* Support HUnit 1.3
+
 ## 2.0
 * Changed API to require `NFData a` so we can fully evaluate expressions, rather than just converting to WHNF.
 
