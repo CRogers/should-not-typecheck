@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, TemplateHaskell #-}
+{-# LANGUAGE GADTs, TemplateHaskell, CPP #-}
 {-# OPTIONS_GHC -fdefer-type-errors #-}
 
 module Main where
@@ -8,24 +8,43 @@ import Control.Exception
 import GHC.Generics (Generic)
 import Test.Hspec
 import Test.Hspec.Expectations (expectationFailure)
-import Test.HUnit.Lang (performTestCase)
+import qualified Test.HUnit.Lang as HL
 import Test.ShouldNotTypecheck
+
+data Result
+  = Success
+  | Failure
+  | Error String
+
+#if MIN_VERSION_HUnit(1,3,0)
+toResult :: HL.Result -> Result
+toResult result = case result of
+  HL.Success -> Success
+  HL.Failure _ _ -> Failure
+  HL.Error _ msg -> Error msg
+#else
+toResult :: Maybe (Bool, String) -> Result
+toResult result = case result of
+  Nothing -> Success
+  Just (True, _) -> Failure
+  Just (False, msg) -> Error msg
+#endif
 
 shouldFailAssertion :: IO () -> IO ()
 shouldFailAssertion value = do
-  result <- performTestCase value
-  case result of
-    Nothing           -> expectationFailure "Did not throw an assertion error"
-    Just (True,  _)   -> return ()
-    Just (False, msg) -> expectationFailure $ "Raised an error " ++ msg
+  result <- HL.performTestCase value
+  case toResult result of
+    Success   -> expectationFailure "Did not throw an assertion error"
+    Failure   -> return ()
+    Error msg -> expectationFailure $ "Raised an error " ++ msg
 
 shouldThrowException :: Exception e => e -> IO () -> IO ()
 shouldThrowException exception value = do
-  result <- performTestCase value
-  case result of
-    Nothing           -> expectationFailure "Did not throw exception: assertion succeeded"
-    Just (True,  _)   -> expectationFailure "Did not throw exception: assertion failed"
-    Just (False, msg) -> case msg == show exception of
+  result <- HL.performTestCase value
+  case toResult result of
+    Success   -> expectationFailure "Did not throw exception: assertion succeeded"
+    Failure   -> expectationFailure "Did not throw exception: assertion failed"
+    Error msg -> case msg == show exception of
       True -> return ()
       False -> expectationFailure "Incorrect exception propagated"
 
