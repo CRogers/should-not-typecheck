@@ -4,7 +4,7 @@
 
 ## Example (hspec)
 
-The secret sauce is the [Deferred Type Errors GHC extension](https://downloads.haskell.org/~ghc/7.10.1/docs/html/users_guide/defer-type-errors.html). This allows you to write a ill-typed expression which will throw an exception at run time (rather than erroring out at compile time). `shouldNotTypecheck` tries to catch that exception and fails the test if no deferred type error is caught.
+The secret sauce is the [Deferred Type Errors GHC extension](https://downloads.haskell.org/~ghc/7.10.1/docs/html/users_guide/defer-type-errors.html). This allows you to write an ill-typed expression which will throw an exception at run time (rather than erroring out at compile time). `shouldNotTypecheck` tries to catch that exception and fails the test if no deferred type error is caught.
 
 ```haskell
 {-# OPTIONS_GHC -fdefer-type-errors #-} -- Very important!
@@ -67,7 +67,7 @@ badExpr = Add (IntVal 4) (BoolVal True)
 -- do not typecheck!
 ```
 
-If you forget to specify provide an `NFData` instance for a type `should-not-typecheck` should warn you.
+If you forget to specify an `NFData` instance for a type `should-not-typecheck` should warn you.
 
 ## Motivation
 
@@ -100,7 +100,7 @@ main = hspec $ do
    -- ...
 ```
 
-Will create a warning at compile time but not an error. All of the ill-typed expressions we are testing will also produce warnings and it will hard to immediately see which ones matter. The upside is that the test-suite will still fail if there are errors.
+Will create a warning at compile time but not an error. All of the ill-typed expressions we are testing will also produce warnings and it will be hard to immediately see which ones matter. The upside is that the test-suite will still fail if there are errors.
 
 ### Workaround
 
