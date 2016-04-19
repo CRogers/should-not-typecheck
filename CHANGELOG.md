@@ -1,5 +1,8 @@
 # `should-not-typecheck` changelog
 
+## 2.1.0
+* Support GHC 8.0.1 (see https://github.com/CRogers/should-not-typecheck/pull/6).
+
 ## 2.0.1
 * Support HUnit 1.3
 
