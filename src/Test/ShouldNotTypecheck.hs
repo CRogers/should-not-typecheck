@@ -8,15 +8,8 @@ module Test.ShouldNotTypecheck (shouldNotTypecheck) where
 
 import Control.DeepSeq (force, NFData)
 import Control.Exception (evaluate, try, throwIO, TheExc(..))
-import Data.List (isSuffixOf)
+import Data.List (isSuffixOf, isInfixOf)
 import Test.HUnit.Lang (Assertion, assertFailure)
-
--- Taken from base-4.8.0.0:Data.List
-isSubsequenceOf :: (Eq a) => [a] -> [a] -> Bool
-isSubsequenceOf []    _                    = True
-isSubsequenceOf _     []                   = False
-isSubsequenceOf a@(x:a') (y:b) | x == y    = isSubsequenceOf a' b
-                               | otherwise = isSubsequenceOf a b
 
 {-|
   Takes one argument, an expression that should not typecheck.
@@ -36,7 +29,7 @@ shouldNotTypecheck a = do
   case result of
     Right _ -> assertFailure "Expected expression to not compile but it did compile"
     Left e@(TheExc msg) -> case isSuffixOf "(deferred type error)" msg of
-      True -> case isSubsequenceOf "No instance for" msg && isSubsequenceOf "NFData" msg of
+      True -> case isInfixOf "No instance for" msg && isInfixOf "NFData" msg of
         True -> assertFailure $ "Make sure the expression has an NFData instance! See docs at https://github.com/CRogers/should-not-typecheck#nfdata-a-constraint. Full error:\n" ++ msg
         False -> return ()
       False -> throwIO e
