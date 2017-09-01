@@ -16,7 +16,7 @@ import Test.HUnit.Lang (Assertion, assertFailure)
   It will fail the test if the expression does typecheck.
   Requires Deferred Type Errors to be enabled for the file it is called in.
   See the <https://github.com/CRogers/should-not-typecheck#should-not-typecheck- README>
-  for examples and more infomation.
+  for examples and more information.
 -}
 #if __GLASGOW_HASKELL__ >= 800
 shouldNotTypecheck :: NFData a => (() ~ () => a) -> Assertion
